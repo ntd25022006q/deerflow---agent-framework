@@ -1,0 +1,146 @@
+{
+  "$schema": "https://deerflow.dev/manifest.schema.json",
+  "name": "deerflow-agent-framework",
+  "version": "1.0.0",
+  "description": "Universal AI Agent Governance Framework — Enforces production-ready standards across all AI coding assistants",
+  "license": "MIT",
+  "author": "Deerflow Community",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ntd25022006q/deerflow---agent-framework"
+  },
+  "keywords": [
+    "ai-agent",
+    "code-quality",
+    "agent-governance",
+    "deerflow",
+    "agentic-workflow",
+    "strict-standards",
+    "ai-coding",
+    "agent-framework",
+    "quality-gate",
+    "production-ready"
+  ],
+
+  "enforcement": {
+    "level": "STRICT",
+    "mode": "ENFORCE_ALL",
+    "autoReject": true,
+    "requireBoot": true,
+    "requireQualityGate": true,
+    "requireTestCoverage": true,
+    "requireBuildValidation": true,
+    "requireSecurityAudit": true,
+    "zeroTolerance": [
+      "data_deletion",
+      "mock_data",
+      "no_tests",
+      "type_any",
+      "fabrication",
+      "infinite_loop",
+      "secret_exposure",
+      "broken_build",
+      "incomplete_deliverable",
+      "hallucination"
+    ]
+  },
+
+  "qualityGates": {
+    "eslint": { "errors": 0, "warnings": 0 },
+    "typescript": { "strict": true, "errors": 0 },
+    "tests": { "passRate": 100, "minCoverage": 80 },
+    "build": { "mustSucceed": true, "minSizeKB": 100 },
+    "security": { "maxCritical": 0, "maxHigh": 0 },
+    "accessibility": { "level": "WCAG_2_1_AA" },
+    "bundleSize": {
+      "warningMB": 5,
+      "errorMB": 10
+    }
+  },
+
+  "workflow": {
+    "bootSequence": [
+      "read:AGENT_RULES.md",
+      "read:DEERFLOW_MANIFEST.json",
+      "init:context-manager",
+      "run:deerflow-validate --check",
+      "confirm:compliance"
+    ],
+    "taskExecution": [
+      "analyze:requirements",
+      "research:existing-codebase",
+      "plan:implementation",
+      "implement:step-by-step",
+      "test:each-step",
+      "verify:quality-gates",
+      "deliver:complete-package"
+    ],
+    "fixProtocol": [
+      "root-cause-analysis",
+      "verify-fix-scope",
+      "implement-complete-fix",
+      "run-full-test-suite",
+      "check-related-code",
+      "verify-type-safety",
+      "verify-build-success"
+    ]
+  },
+
+  "compatibleAgents": {
+    "supported": [
+      "cursor",
+      "claude-code",
+      "github-copilot",
+      "windsurf",
+      "roo-code",
+      "aider",
+      "continue-dev",
+      "cody",
+      "tabnine",
+      "supermaven",
+      "z-ai",
+      "custom-agents"
+    ],
+    "ruleFiles": {
+      "cursor": ".cursorrules",
+      "claude-code": "CLAUDE.md",
+      "github-copilot": ".github/copilot-instructions.md",
+      "windsurf": ".windsurfrules",
+      "roo-code": ".roo/rules.md",
+      "universal": "AGENT_RULES.md"
+    }
+  },
+
+  "mcp": {
+    "enabled": true,
+    "servers": {
+      "deerflow-validator": "./mcp/server-config.json",
+      "tools": [
+        "code-validator",
+        "dependency-checker",
+        "build-auditor",
+        "security-scanner",
+        "test-runner",
+        "context-manager"
+      ]
+    }
+  },
+
+  "scripts": {
+    "setup": "bash scripts/setup.sh",
+    "validate": "bash scripts/validate.sh",
+    "enforce": "bash scripts/enforce.sh",
+    "quality-gate": "bash scripts/validate.sh --quality-gate",
+    "security-audit": "bash scripts/validate.sh --security",
+    "pre-commit": "bash scripts/enforce.sh --pre-commit"
+  },
+
+  "templates": {
+    "eslint": "./templates/.eslintrc.deerflow.js",
+    "prettier": "./templates/.prettierrc",
+    "typescript": "./templates/tsconfig.strict.json",
+    "vitest": "./templates/vitest.config.ts",
+    "editorconfig": "./templates/.editorconfig",
+    "husky": "./templates/.husky/pre-commit"
+  }
+}

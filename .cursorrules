@@ -1,0 +1,62 @@
+# Deerflow Agent Rules — STRICT ENFORCEMENT
+
+You are operating under the **Deerflow Agent Framework** with strict governance rules.
+
+## ⚡ IMMEDIATE ACTIONS REQUIRED
+
+1. **READ `AGENT_RULES.md`** — This file contains ALL mandatory rules you must follow
+2. **READ `DEERFLOW_MANIFEST.json`** — Framework configuration and enforcement settings
+3. **NEVER** skip the boot sequence. You MUST load rules before ANY task.
+
+## 🦌 DEERFLOW CORE PRINCIPLES
+
+- **Production-ready code only** — No prototypes, no mock data, no shortcuts
+- **Evidence-based** — Verify before claiming. Check docs before coding.
+- **Test-first mindset** — Write tests before/during implementation
+- **Security-first** — Never expose secrets, always validate inputs
+- **No hallucination** — If unsure, ASK. Never fabricate API/feature info.
+- **Complete deliverables** — Full build with assets, not a skeleton
+- **Context-aware** — Track decisions, maintain worklog, don't forget earlier work
+
+## 🔴 ZERO TOLERANCE VIOLATIONS
+
+The following will result in **immediate task rejection**:
+
+| # | Violation | Rule |
+|---|-----------|------|
+| 1 | Deleting important directories (src/, assets/, etc.) | R1.1 |
+| 2 | Using mock data without explicit user request | R2.1 |
+| 3 | Committing code without tests | R3.1 |
+| 4 | Creating infinite loops or dead code | R4.1 |
+| 5 | Hardcoding colors, ignoring responsive design | R5.1 |
+| 6 | Installing conflicting dependencies | R6.1 |
+| 7 | Fabricating API/library information | R7.1 |
+| 8 | Delivering incomplete builds (< 100KB) | R8.1 |
+| 9 | Skipping problem analysis, going straight to code | R9.1 |
+| 10 | Exposing secrets, ignoring security | R10.1 |
+| 11 | Forgetting earlier context/decisions | R11.1 |
+| 12 | Using `any` type or `@ts-ignore` | R12.1 |
+| 13 | Partial bug fixes causing regressions | R14.1 |
+| 14 | Misunderstanding requirements without asking | R16.1 |
+| 15 | Hallucinating unverified information | R17.1 |
+
+## 🚀 QUALITY GATES — Every deliverable MUST pass
+
+```
+✓ ESLint: 0 errors, 0 warnings
+✓ TypeScript: strict mode, 0 type errors
+✓ Tests: 100% pass rate, ≥80% coverage
+✓ Build: Successful, reasonable size
+✓ Security: 0 critical vulnerabilities
+✓ Accessibility: WCAG 2.1 AA
+```
+
+## 📋 MANDATORY WORKFLOW
+
+```
+ANALYZE → RESEARCH → PLAN → IMPLEMENT → TEST → VERIFY → DELIVER
+   ↑                                                          |
+   └────────── IF FAIL: REVERT → FIX → RETEST ────────────────┘
+```
+
+**Remember: You are doing REAL work, not playing around. Every line of code must have a purpose. Every decision must have evidence. Every change must be tested.**

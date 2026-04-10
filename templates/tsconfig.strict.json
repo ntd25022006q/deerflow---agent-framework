@@ -1,0 +1,210 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+
+  "// ABOUT": "Deerflow Agent Framework — Strict TypeScript Configuration",
+  "// USAGE": "Extend this config in your project's tsconfig.json via 'extends'",
+
+  "compilerOptions": {
+
+    // =========================================================================
+    // LANGUAGE & COMPILATION TARGET
+    // =========================================================================
+
+    // Compile to ES2022 — supports top-level await, class fields, private methods,
+    // .at() method, Object.hasOwn(), Array.prototype.findLast(), and more.
+    // This is the recommended minimum target for modern server and edge runtimes.
+    "target": "ES2022",
+
+    // Type definitions to include. DOM for browser APIs, DOM.Iterable for
+    // iterables like NodeList.forEach(), ES2022 for the latest standard library.
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+
+    // =========================================================================
+    // MODULE SYSTEM
+    // =========================================================================
+
+    // Use the latest module syntax (ESNext = ES modules with top-level await).
+    "module": "ESNext",
+
+    // Use "bundler" resolution — resolves imports the way bundlers like Vite,
+    // webpack, and esbuild do. This is the modern replacement for "node" and "node16".
+    // Supports path aliases, package.json "exports" field, and extensionless imports.
+    "moduleResolution": "bundler",
+
+    // Allow importing JSON files with type safety via `import data from './file.json'`.
+    "resolveJsonModule": true,
+
+    // Ensure each file can be independently transpiled (required by bundlers).
+    // Prevents certain cross-file optimizations but guarantees compatibility.
+    "isolatedModules": true,
+
+    // =========================================================================
+    // JSX SUPPORT
+    // =========================================================================
+
+    // Preserve JSX as-is — let the bundler/framework (React, Vue, Solid) handle
+    // the JSX transform. This is the standard setting for Vite + React projects.
+    "jsx": "preserve",
+
+    // =========================================================================
+    // STRICT TYPE-CHECKING (Core)
+    // =========================================================================
+
+    // Enable ALL strict type-checking options. This is the foundation of the
+    // Deerflow strict config. It enables: strictNullChecks, strictFunctionTypes,
+    // strictBindCallApply, strictPropertyInitialization, noImplicitAny,
+    // noImplicitThis, alwaysStrict.
+    "strict": true,
+
+    // Report errors on unused local variables. Forces code cleanliness and
+    // prevents dead code from accumulating in the codebase.
+    "noUnusedLocals": true,
+
+    // Report errors on unused function parameters. Use underscore prefix (_param)
+    // to intentionally mark parameters as unused (e.g., callback signatures).
+    "noUnusedParameters": true,
+
+    // Report errors for fallthrough cases in switch statements. Each case must
+    // have a break, return, throw, or an explicit /* falls through */ comment.
+    "noFallthroughCasesInSwitch": true,
+
+    // Add 'undefined' to index signature results. For example, `obj[key]` will
+    // return `T | undefined` instead of just `T`, forcing you to handle the
+    // case where the key doesn't exist. Critical for runtime safety.
+    "noUncheckedIndexedAccess": true,
+
+    // =========================================================================
+    // STRICT TYPE-CHECKING (Extended)
+    // =========================================================================
+
+    // When enabled, optional properties cannot be assigned `undefined` explicitly.
+    // Set to false for compatibility with many popular libraries that use
+    // `undefined` as a reset value for optional properties.
+    "exactOptionalPropertyTypes": false,
+
+    // Force consistent casing for file names in imports. `import Foo from './Foo'`
+    // must match the actual file name on disk (case-sensitive). Prevents issues
+    // on case-sensitive file systems (Linux) and cross-platform development.
+    "forceConsistentCasingInFileNames": true,
+
+    // Skip type-checking of declaration files from node_modules. Improves
+    // compilation speed without affecting your project's type safety.
+    "skipLibCheck": true,
+
+    // =========================================================================
+    // OUTPUT OPTIONS
+    // =========================================================================
+
+    // Generate .d.ts declaration files alongside .js output. Required for
+    // publishing packages or creating type-aware project references.
+    "declaration": true,
+
+    // Generate source maps for declaration files. Enables "Go to Definition"
+    // navigation into the compiled output when debugging.
+    "declarationMap": true,
+
+    // Generate source maps for compiled JavaScript. Required for debugging
+    // compiled code and for source-map-aware tooling.
+    "sourceMap": true,
+
+    // =========================================================================
+    // INTEROPERABILITY
+    // =========================================================================
+
+    // Enable interoperability between CommonJS and ES modules. Allows default
+    // imports from CJS modules that use module.exports: `import fs from 'fs'`.
+    "esModuleInterop": true,
+
+    // =========================================================================
+    // PERFORMANCE
+    // =========================================================================
+
+    // Enable incremental compilation. TypeScript will cache information from
+    // the last compilation to speed up subsequent builds. Requires a
+    // tsconfig.tsbuildinfo file (generated automatically).
+    "incremental": true,
+
+    // =========================================================================
+    // ADDITIONAL SAFETY
+    // =========================================================================
+
+    // Ensure all code paths in a function return a value (or throw). Catches
+    // subtle bugs where a function returns undefined unexpectedly.
+    "noImplicitReturns": true,
+
+    // Forces bracket notation for accessing properties declared via index
+    // signatures. `obj['key']` instead of `obj.key` — makes it visually clear
+    // that the access is not type-safe.
+    "noPropertyAccessFromIndexSignature": true,
+
+    // Disallow unused labels. Labels like `loop1:` that are never referenced
+    // with `break loop1:` or `continue loop1:` are flagged.
+    "allowUnusedLabels": false,
+
+    // Disallow unreachable code. Any code after a return, throw, break, or
+    // continue statement will be reported as an error.
+    "allowUnreachableCode": false,
+
+    // =========================================================================
+    // EXPLICIT STRICT SUB-OPTIONS
+    // (These are technically enabled by "strict": true, but we list them
+    //  explicitly for documentation clarity and to allow easy modification)
+    // =========================================================================
+
+    // Strict null checks: `null` and `undefined` are distinct from other types.
+    // Variables typed as `string` cannot be assigned `null` without explicit
+    // union: `string | null`. This is the single most impactful strict option.
+    "strictNullChecks": true,
+
+    // Strict function types: enforces contravariance for function parameter
+    // types in assignment contexts. Prevents a class of type-safety bugs where
+    // a function expecting a more general type is replaced with one expecting
+    // a more specific type.
+    "strictFunctionTypes": true,
+
+    // Strict bind/call/apply: TypeScript will check that the `this` parameter
+    // type in a function matches the `thisArg` passed to .bind(), .call(), or
+    // .apply(). Prevents runtime "this" binding errors.
+    "strictBindCallApply": true,
+
+    // No implicit this: when `strict: true` is set, `this` expressions in
+    // functions that don't have a `this` parameter type annotation will error.
+    // Ensures `this` is always explicitly typed.
+    "noImplicitThis": true,
+
+    // No implicit override: class methods that override a parent class method
+    // must include the `override` keyword. Prevents silent bugs when a parent
+    // method is renamed but the child's override is not updated.
+    "noImplicitOverride": true,
+
+    // =========================================================================
+    // PATH ALIASES
+    // =========================================================================
+
+    // Configure path aliases for clean imports. Extend this in your project
+    // to match your source structure. Example:
+    //   "@/*": ["./src/*"]
+    //   "@components/*": ["./src/components/*"]
+    //   "@lib/*": ["./src/lib/*"]
+    "paths": {}
+  },
+
+  // =========================================================================
+  // FILE INCLUSION / EXCLUSION
+  // =========================================================================
+
+  // Include all TypeScript files in the src directory.
+  "include": ["src/**/*"],
+
+  // Exclude these directories from compilation.
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    "coverage",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "**/*.spec.tsx",
+    "**/*.test.tsx"
+  ]
+}

@@ -1,0 +1,125 @@
+{
+  "name": "check-dependencies",
+  "description": "Analyzes project dependencies for compatibility issues, version conflicts, outdated packages, missing peer dependencies, and license compliance. Supports both npm and bun lockfiles. Evaluates semantic versioning ranges against the project's engine requirements and detects known problematic version combinations.",
+  "version": "1.0.0",
+  "category": "compatibility",
+  "inputSchema": {
+    "type": "object",
+    "required": ["packageJson"],
+    "properties": {
+      "packageJson": {
+        "type": "string",
+        "description": "Path to the package.json file to analyze for dependency compatibility.",
+        "minLength": 1,
+        "examples": ["./package.json", "/project/package.json"]
+      },
+      "newPackage": {
+        "type": "object",
+        "description": "A new package to evaluate for compatibility before installation. If provided, the tool simulates adding this package and checks for conflicts.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Exact npm/bun package name",
+            "minLength": 1,
+            "examples": ["zod", "@prisma/client", "hono"]
+          },
+          "version": {
+            "type": "string",
+            "description": "Semver version or range (e.g., '^3.22.0', 'latest', 'next'). If omitted, resolves the latest compatible version.",
+            "default": "latest",
+            "pattern": "^(\\d+\\.\\d+\\.\\d+|[~^><=]*\\d+|latest|next|canary|rc|beta|alpha)$"
+          },
+          "type": {
+            "type": "string",
+            "description": "Dependency type to install as",
+            "enum": ["dependency", "devDependency", "peerDependency", "optionalDependency"],
+            "default": "dependency"
+          }
+        },
+        "required": ["name"]
+      },
+      "checkPeerDependencies": {
+        "type": "boolean",
+        "description": "Whether to validate peer dependency requirements. Checks that all peer deps are satisfied with compatible versions.",
+        "default": true
+      },
+      "checkEngine": {
+        "type": "boolean",
+        "description": "Whether to validate engine compatibility (Node.js, Bun versions) against the project's engines field.",
+        "default": true
+      },
+      "checkLicenses": {
+        "type": "boolean",
+        "description": "Whether to verify all dependencies use licenses from the allowed list defined in DEERFLOW_ALLOWED_LICENSES.",
+        "default": true
+      },
+      "checkOutdated": {
+        "type": "boolean",
+        "description": "Whether to flag dependencies that have newer compatible versions available.",
+        "default": false
+      },
+      "depth": {
+        "type": "integer",
+        "description": "How deep to traverse the dependency tree for conflict detection (0 = direct deps only, -1 = full tree).",
+        "default": -1,
+        "minimum": -1,
+        "maximum": 10
+      }
+    }
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "compatible": { "type": "boolean" },
+      "packageCount": { "type": "integer" },
+      "conflictCount": { "type": "integer" },
+      "conflicts": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "package": { "type": "string" },
+            "installedVersion": { "type": "string" },
+            "requiredVersion": { "type": "string" },
+            "conflictingPackage": { "type": "string" },
+            "resolution": { "type": "string" },
+            "severity": { "type": "string", "enum": ["error", "warn"] }
+          }
+        }
+      },
+      "outdated": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "package": { "type": "string" },
+            "current": { "type": "string" },
+            "latest": { "type": "string" },
+            "updateType": { "type": "string", "enum": ["major", "minor", "patch"] }
+          }
+        }
+      },
+      "licenseViolations": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "package": { "type": "string" },
+            "license": { "type": "string" },
+            "allowedLicenses": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      },
+      "newPackageCompatibility": {
+        "type": "object",
+        "properties": {
+          "compatible": { "type": "boolean" },
+          "estimatedSizeKB": { "type": "integer" },
+          "newDependencies": { "type": "array", "items": { "type": "string" } },
+          "warnings": { "type": "array", "items": { "type": "string" } }
+        },
+        "description": "Only present when newPackage is provided"
+      }
+    }
+  }
+}

@@ -1,0 +1,53 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output
+dist/
+build/
+.next/
+.nuxt/
+output/
+.server/
+.vercel/
+
+# Environment
+.env
+.env.local
+.env.*.local
+.env.production
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test
+coverage/
+.nyc_output/
+*.lcov
+
+# Misc
+*.log
+*.tsbuildinfo
+.eslintcache
+.cache/
+.parcel-cache/
+
+# Temp
+tmp/
+temp/
+
+# Deerflow runtime
+.deerflow/cache/
+.deerflow/reports/
+
+# Bun
+bun.lockb

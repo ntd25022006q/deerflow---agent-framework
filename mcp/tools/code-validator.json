@@ -1,0 +1,120 @@
+{
+  "name": "validate-code",
+  "description": "Validates source code files against Deerflow coding standards. Performs static analysis including ESLint rule enforcement, TypeScript strict-mode type checking, cyclomatic complexity limits, import order validation, and anti-pattern detection (mock data, hardcoded secrets, `any` type usage). Returns a detailed report with per-file severity breakdown and fix suggestions.",
+  "version": "1.0.0",
+  "category": "quality",
+  "inputSchema": {
+    "type": "object",
+    "required": ["filePath"],
+    "properties": {
+      "filePath": {
+        "type": "string",
+        "description": "Absolute or relative path to the file or directory to validate. Supports glob patterns for batch validation (e.g., 'src/**/*.ts').",
+        "minLength": 1,
+        "examples": ["src/index.ts", "src/components/*.tsx", "lib/"]
+      },
+      "rules": {
+        "type": "array",
+        "description": "List of specific Deerflow validation rules to apply. If omitted, all default rules are enforced.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique rule identifier",
+              "enum": [
+                "no-mock-data",
+                "no-hardcoded-secrets",
+                "no-any-type",
+                "max-complexity",
+                "import-order",
+                "no-console-log",
+                "require-explicit-types",
+                "max-file-lines",
+                "require-error-handling",
+                "no-circular-deps",
+                "enforce-strict-null-checks",
+                "require-unit-tests",
+                "no-deprecated-apis",
+                "consistent-naming",
+                "max-nested-depth"
+              ]
+            },
+            "severity": {
+              "type": "string",
+              "description": "Severity level for violations of this rule",
+              "enum": ["error", "warn", "info"],
+              "default": "error"
+            },
+            "options": {
+              "type": "object",
+              "description": "Rule-specific configuration options",
+              "additionalProperties": true
+            }
+          },
+          "required": ["id"]
+        },
+        "default": [
+          { "id": "no-mock-data", "severity": "error" },
+          { "id": "no-hardcoded-secrets", "severity": "error" },
+          { "id": "no-any-type", "severity": "error" },
+          { "id": "max-complexity", "severity": "warn", "options": { "maxComplexity": 10 } },
+          { "id": "import-order", "severity": "warn" },
+          { "id": "require-explicit-types", "severity": "warn" },
+          { "id": "max-file-lines", "severity": "warn", "options": { "maxLines": 300 } },
+          { "id": "no-console-log", "severity": "error" },
+          { "id": "require-error-handling", "severity": "error" },
+          { "id": "no-circular-deps", "severity": "error" }
+        ]
+      },
+      "strictMode": {
+        "type": "boolean",
+        "description": "When true, treats all warnings as errors and fails the validation if any rule violation is found regardless of severity.",
+        "default": true
+      },
+      "fixMode": {
+        "type": "boolean",
+        "description": "When true, attempts auto-fixable corrections and returns a diff of proposed changes.",
+        "default": false
+      },
+      "reportFormat": {
+        "type": "string",
+        "description": "Output format for the validation report",
+        "enum": ["json", "sarif", "text", "html"],
+        "default": "json"
+      }
+    }
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "valid": { "type": "boolean" },
+      "fileCount": { "type": "integer" },
+      "violationCount": { "type": "integer" },
+      "violations": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "file": { "type": "string" },
+            "line": { "type": "integer" },
+            "column": { "type": "integer" },
+            "ruleId": { "type": "string" },
+            "severity": { "type": "string" },
+            "message": { "type": "string" },
+            "suggestion": { "type": "string" }
+          }
+        }
+      },
+      "summary": {
+        "type": "object",
+        "properties": {
+          "errors": { "type": "integer" },
+          "warnings": { "type": "integer" },
+          "info": { "type": "integer" },
+          "fixable": { "type": "integer" }
+        }
+      }
+    }
+  }
+}

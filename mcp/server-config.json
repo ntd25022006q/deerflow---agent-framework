@@ -1,0 +1,78 @@
+{
+  "mcpServers": {
+    "deerflow-validator": {
+      "command": "node",
+      "args": ["./mcp/deerflow-mcp-server.js"],
+      "description": "Deerflow Agent Quality Validator — validates code against Deerflow standards. Enforces strict quality gates, dependency compatibility, security scanning, build verification, and contextual analysis across the entire agent framework.",
+      "tools": [
+        {
+          "name": "validate-code",
+          "description": "Runs comprehensive code validation against Deerflow coding standards including linting, type checking, complexity analysis, and anti-pattern detection.",
+          "category": "quality",
+          "required": true,
+          "defaultArguments": {
+            "strictMode": true,
+            "failOnWarning": true
+          }
+        },
+        {
+          "name": "check-dependencies",
+          "description": "Validates dependency compatibility, checks for version conflicts, outdated packages, and ensures all required peer dependencies are satisfied.",
+          "category": "compatibility",
+          "required": true
+        },
+        {
+          "name": "audit-security",
+          "description": "Performs security audit including npm audit, secret detection, known vulnerability scanning, and license compliance checks.",
+          "category": "security",
+          "required": true,
+          "severityThreshold": "high"
+        },
+        {
+          "name": "verify-build",
+          "description": "Validates the build output including bundle size limits, required file existence, source map generation, and production readiness checks.",
+          "category": "build",
+          "required": true
+        },
+        {
+          "name": "analyze-context",
+          "description": "Performs contextual analysis of code changes including impact assessment, dependency graph analysis, and architectural compliance verification.",
+          "category": "analysis",
+          "required": false
+        }
+      ],
+      "capabilities": {
+        "streaming": false,
+        "progressNotifications": true,
+        "cancellation": true
+      },
+      "configuration": {
+        "requestTimeoutMs": 300000,
+        "maxRetries": 3,
+        "retryDelayMs": 1000,
+        "concurrentRequests": 5
+      },
+      "env": {
+        "DEERFLOW_STRICT_MODE": "true",
+        "DEERFLOW_AUTO_REJECT": "true",
+        "DEERFLOW_LOG_LEVEL": "info",
+        "DEERFLOW_CACHE_DIR": "./.deerflow/cache",
+        "DEERFLOW_REPORT_FORMAT": "json",
+        "DEERFLOW_MAX_BUNDLE_SIZE_KB": "500",
+        "DEERFLOW_MIN_TEST_COVERAGE": "80",
+        "DEERFLOW_ALLOWED_LICENSES": "MIT,Apache-2.0,BSD-2-Clause,BSD-3-Clause,ISC,0BSD"
+      },
+      "version": "1.0.0",
+      "author": "Deerflow Engineering",
+      "license": "MIT"
+    }
+  },
+  "globalSettings": {
+    "enforceOnPush": true,
+    "enforceOnPR": true,
+    "blockMergeOnFailure": true,
+    "notificationChannel": "github-checks",
+    "reportRetentionDays": 90,
+    "allowedBypassReasons": ["hotfix", "infra", "docs-only"]
+  }
+}

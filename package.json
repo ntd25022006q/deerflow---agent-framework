@@ -1,0 +1,75 @@
+{
+  "name": "deerflow-agent-framework",
+  "version": "1.0.0",
+  "description": "Universal AI Agent Governance Framework — Enforces production-ready standards across all AI coding assistants via strict rules, quality gates, and agentic workflows.",
+  "main": "src/deerflow/core/index.ts",
+  "types": "src/deerflow/core/index.ts",
+  "scripts": {
+    "setup": "bash scripts/setup.sh",
+    "validate": "bash scripts/validate.sh",
+    "validate:quality-gate": "bash scripts/validate.sh --quality-gate",
+    "validate:security": "bash scripts/validate.sh --security",
+    "validate:all": "bash scripts/validate.sh --all --verbose",
+    "enforce": "bash scripts/enforce.sh",
+    "enforce:pre-commit": "bash scripts/enforce.sh --pre-commit",
+    "lint": "tsc --noEmit",
+    "type-check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "build": "tsc",
+    "security-audit": "npm audit --audit-level=high",
+    "deerflow:check": "bash scripts/validate.sh --all"
+  },
+  "keywords": [
+    "ai-agent",
+    "agent-governance",
+    "code-quality",
+    "deerflow",
+    "agentic-workflow",
+    "strict-standards",
+    "quality-gate",
+    "agent-framework",
+    "production-ready",
+    "ai-coding",
+    "copilot",
+    "cursor",
+    "claude"
+  ],
+  "author": "Deerflow Community",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ntd25022006q/deerflow---agent-framework"
+  },
+  "bugs": {
+    "url": "https://github.com/ntd25022006q/deerflow---agent-framework/issues"
+  },
+  "homepage": "https://github.com/ntd25022006q/deerflow---agent-framework#readme",
+  "devDependencies": {
+    "typescript": "^5.7.0",
+    "eslint": "^9.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "prettier": "^3.4.0",
+    "vitest": "^2.1.0",
+    "@vitest/coverage-v8": "^2.1.0",
+    "husky": "^9.1.0",
+    "lint-staged": "^15.2.0",
+    "@types/node": "^22.0.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix --max-warnings 0",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "name": "security-scanner",
+  "description": "Performs a multi-layered security scan on the project codebase. Detects hardcoded secrets and credentials, scans dependencies for known vulnerabilities (CVEs), identifies insecure coding patterns (eval usage, unsafe regex, SQL injection vectors, XSS-prone patterns), and checks for misconfigured security headers or exposed debug endpoints. Produces a severity-ranked report with remediation guidance.",
+  "version": "1.0.0",
+  "category": "security",
+  "inputSchema": {
+    "type": "object",
+    "required": ["scanPath"],
+    "properties": {
+      "scanPath": {
+        "type": "string",
+        "description": "Root path of the project or directory to scan. Recursively scans all files within this path.",
+        "minLength": 1,
+        "examples": ["./src", "./", "/home/user/project"]
+      },
+      "checkSecrets": {
+        "type": "boolean",
+        "description": "Enable detection of hardcoded secrets including API keys, tokens, passwords, private keys, and connection strings. Uses pattern matching and entropy analysis.",
+        "default": true
+      },
+      "checkDependencies": {
+        "type": "boolean",
+        "description": "Enable vulnerability scanning of project dependencies using npm audit and the NPM Advisory Database. Checks for known CVEs with severity classification.",
+        "default": true
+      },
+      "checkCodePatterns": {
+        "type": "boolean",
+        "description": "Enable static analysis for insecure coding patterns including eval(), innerHTML injection, unsafe regex, command injection, path traversal, and insecure deserialization.",
+        "default": true
+      },
+      "secretPatterns": {
+        "type": "object",
+        "description": "Custom secret detection patterns. Overrides default patterns when provided.",
+        "properties": {
+          "additionalRegex": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "pattern": { "type": "string" },
+                "severity": { "type": "string", "enum": ["critical", "high", "medium", "low"] }
+              },
+              "required": ["name", "pattern"]
+            }
+          },
+          "excludePatterns": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Regex patterns for values to exclude from secret detection (e.g., dummy/test values)"
+          }
+        }
+      },
+      "excludePaths": {
+        "type": "array",
+        "description": "Directories or file patterns to exclude from scanning.",
+        "items": { "type": "string" },
+        "default": ["node_modules", ".git", "dist", ".next", "coverage"]
+      },
+      "maxFileSizeKB": {
+        "type": "integer",
+        "description": "Maximum file size in KB to scan. Files exceeding this size are skipped.",
+        "default": 1024,
+        "minimum": 1
+      },
+      "failOnSeverity": {
+        "type": "string",
+        "description": "Minimum severity level that causes the scan to report a failure.",
+        "enum": ["critical", "high", "medium", "low", "info"],
+        "default": "high"
+      },
+      "reportFormat": {
+        "type": "string",
+        "description": "Output format for the security report.",
+        "enum": ["json", "sarif", "text", "html", "markdown"],
+        "default": "json"
+      }
+    }
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "scanPassed": { "type": "boolean" },
+      "scanPath": { "type": "string" },
+      "timestamp": { "type": "string" },
+      "durationMs": { "type": "integer" },
+      "filesScanned": { "type": "integer" },
+      "summary": {
+        "type": "object",
+        "properties": {
+          "critical": { "type": "integer" },
+          "high": { "type": "integer" },
+          "medium": { "type": "integer" },
+          "low": { "type": "integer" },
+          "info": { "type": "integer" }
+        }
+      },
+      "findings": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string" },
+            "type": {
+              "type": "string",
+              "enum": ["secret", "dependency", "code-pattern", "misconfiguration"]
+            },
+            "severity": {
+              "type": "string",
+              "enum": ["critical", "high", "medium", "low", "info"]
+            },
+            "file": { "type": "string" },
+            "line": { "type": "integer" },
+            "column": { "type": "integer" },
+            "title": { "type": "string" },
+            "description": { "type": "string" },
+            "cve": { "type": "string", "description": "CVE identifier if applicable" },
+            "remediation": { "type": "string" },
+            "references": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"],
+              "description": "Confidence level of the finding"
+            },
+            "matchedValue": {
+              "type": "string",
+              "description": "Redacted version of the matched secret or pattern (e.g., 'sk-****...xyz')"
+            }
+          }
+        }
+      },
+      "dependencyVulnerabilities": {
+        "type": "array",
+        "description": "Aggregated dependency-level vulnerability report",
+        "items": {
+          "type": "object",
+          "properties": {
+            "package": { "type": "string" },
+            "installedVersion": { "type": "string" },
+            "patchedVersion": { "type": "string" },
+            "vulnerabilities": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "cve": { "type": "string" },
+                  "severity": { "type": "string" },
+                  "title": { "type": "string" },
+                  "url": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
