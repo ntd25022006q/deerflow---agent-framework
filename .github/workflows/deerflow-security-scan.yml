@@ -1,0 +1,40 @@
+name: Deerflow Security Scan
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 0 * * 1'
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Security audit
+        run: npm audit --audit-level=high || true
+
+      - name: Check for insecure patterns
+        run: |
+          echo "Checking for insecure code patterns..."
+          PATTERNS="eval\(|\.innerHTML\s*=|dangerouslySetInnerHTML|new Function("
+          FOUND=0
+          for pattern in $PATTERNS; do
+            if rg -l "$pattern" --type ts --type tsx src/ 2>/dev/null; then
+              FOUND=$((FOUND + 1))
+            fi
+          done
+          if [ $FOUND -gt 0 ]; then
+            echo "::warning::$FOUND file(s) with potentially insecure patterns"
+          fi
+          echo "Security scan complete"

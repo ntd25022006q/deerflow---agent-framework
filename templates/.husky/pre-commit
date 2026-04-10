@@ -1,0 +1,33 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Deerflow Pre-commit Hook
+# Enforces quality gates before every commit
+
+echo "🦌 Deerflow Pre-commit Quality Gate"
+
+# Type check
+echo "   Checking TypeScript..."
+npx tsc --noEmit
+if [ $? -ne 0 ]; then
+  echo "❌ TypeScript check failed. Commit rejected."
+  exit 1
+fi
+
+# Lint
+echo "   Checking ESLint..."
+npx eslint . --max-warnings 0
+if [ $? -ne 0 ]; then
+  echo "❌ ESLint check failed. Commit rejected."
+  exit 1
+fi
+
+# Tests
+echo "   Running tests..."
+npx vitest run --passWithNoTests
+if [ $? -ne 0 ]; then
+  echo "❌ Tests failed. Commit rejected."
+  exit 1
+fi
+
+echo "✅ All Deerflow quality gates passed. Proceeding with commit."
